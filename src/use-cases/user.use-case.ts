@@ -11,10 +11,11 @@ export async function getAllUsers(where?: { username: string; }): Promise<User[]
 export async function getUserByEmail(email: string): Promise<User | undefined> {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
+        relations: ["readingList", "readingList.books"],
         where: {
             email: email.toLowerCase()
         },
-    });
+    });    
     return user;
 }
 

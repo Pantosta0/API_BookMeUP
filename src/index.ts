@@ -4,6 +4,7 @@ import cors from "cors";
 import { createConnection } from "typeorm";
 import dotenv from "dotenv";
 import { AuthController } from "./controllers/auth.controller";
+import { BookController } from "./controllers/book.controller";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ createConnection({
     app.use(express.json());
 
     app.use("/auth", AuthController);
+    app.use("/book", BookController);
 
     app.listen(3000, () => {
         console.log("Server running on port 3000");

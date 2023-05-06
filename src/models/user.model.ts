@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { LectureList } from "./lecture-list.model";
 
 @Entity()
 export class User {
@@ -16,6 +17,19 @@ export class User {
 
     @Column({ nullable: true })
     description!: string;
+
+    @OneToOne(() => LectureList, (readingList) => readingList.user)
+    @JoinColumn()
+    readingList?: LectureList;
+
+    @CreateDateColumn()
+    createdAt!: Date;
+
+    @UpdateDateColumn()
+    updatedAt!: Date;
+
+    @DeleteDateColumn()
+    deletedAt!: Date;
 
     constructor(email: string, password: string, username: string, description: string) {
         this.email = email;
