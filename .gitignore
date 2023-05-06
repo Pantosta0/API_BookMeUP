@@ -1,0 +1,17 @@
+# Dependencias instaladas con NPM
+/node_modules
+
+# Archivos generados por TypeScript
+/dist
+
+# Archivos de configuración de IDEs
+.idea
+.vscode
+
+# Archivos de registro
+*.log
+
+# Otros archivos generados
+.DS_Store
+
+.env
