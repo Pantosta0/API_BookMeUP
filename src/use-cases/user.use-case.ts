@@ -1,6 +1,7 @@
 import { getRepository } from "typeorm";
 import { User } from "../models/user.model"
 import { hashPassword } from "../utils/global.util";
+import { LectureList } from "../models/lecture-list.model";
 
 export async function getAllUsers(where?: { username: string; }): Promise<User[]> {
     const userRepository = getRepository(User);
@@ -15,7 +16,7 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
         where: {
             email: email.toLowerCase()
         },
-    });    
+    });
     return user;
 }
 
@@ -45,7 +46,11 @@ export async function createUser(data: {
     data.email = data.email.toLowerCase();
     data.username = data.username.toLowerCase();
     const userRepository = getRepository(User);
-    const userEntity = <User>data;
-    const user = await userRepository.save(userEntity);
-    return user;
+    const lectureListRepository = getRepository(LectureList);
+    let userEntity = <User>data;
+    let user = await userRepository.save(userEntity);
+    let lectureListEntity = new LectureList(userEntity, []);
+    await lectureListRepository.save(lectureListEntity);
+    let saved = await userRepository.findOne(user.id, { relations: ["readingList"] });
+    return saved!;
 }
