@@ -1,7 +1,7 @@
 import express from "express";
 import { createConnection } from "typeorm";
-import { UserController } from "./controllers/user.controller";
 import dotenv from "dotenv";
+import { AuthController } from "./controllers/auth.controller";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ createConnection({
 
     app.use(express.json());
 
-    app.use("/users", UserController);
+    app.use("/auth", AuthController);
 
     app.listen(3000, () => {
         console.log("Server running on port 3000");

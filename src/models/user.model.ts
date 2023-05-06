@@ -5,9 +5,22 @@ export class User {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
-    name!: string;
-
-    @Column()
+    @Column({ nullable: true })
     email!: string;
+
+    @Column({ nullable: true })
+    password!: string;
+
+    @Column({ nullable: true })
+    username!: string;
+
+    @Column({ nullable: true })
+    description!: string;
+
+    constructor(email: string, password: string, username: string, description: string) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.description = description;
+    }
 }
