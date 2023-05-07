@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { createBook, deleteBook, getAllBooks, getBookById } from "../use-cases/book.use-case";
+import { createBook, deleteBook, getAllBooks, getBookById, searchBooks } from "../use-cases/book.use-case";
 import { getUserById } from "../use-cases/user.use-case";
 import { createRank, getRankByUserAndBok, updateRank } from "../use-cases/rank.user-case";
 import { orderBookByTrend } from "../utils/book.utils";
@@ -20,6 +20,15 @@ router.post("/", async (req, res) => {
 
 });
 
+
+router.get("/search", async (req, res) => {    
+    let bookList = await searchBooks(req.query);
+    return res.status(201).json({
+        status: "success",
+        data: bookList
+    });
+});
+
 router.get("/", async (req, res) => {
     const bookList = await getAllBooks();
     return res.status(200).json({
@@ -27,6 +36,8 @@ router.get("/", async (req, res) => {
         data: bookList
     });
 });
+
+
 
 
 router.get("/trend", async (req, res) => {
