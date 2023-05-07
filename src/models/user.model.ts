@@ -19,6 +19,9 @@ export class User {
     @Column({ nullable: true })
     description!: string;
 
+    @Column({ nullable: true, default: "name" })
+    name?: string;
+
     @Column({ nullable: true })
     gender!: string;
 
