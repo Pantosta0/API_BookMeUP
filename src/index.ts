@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { AuthController } from "./controllers/auth.controller";
 import { BookController } from "./controllers/book.controller";
 import { UserController } from "./controllers/user.controller";
+import { join } from 'path';
 
 dotenv.config();
 
@@ -18,16 +19,7 @@ createConnection({
     database: process.env.DB_NAME,
     synchronize: true,
     logging: ["error"],
-    entities: [
-        "src/models/**/*.ts"
-    ],
-    migrations: [
-        "src/migration/**/*.ts"
-    ],
-    cli: {
-        "entitiesDir": "src/models",
-        "migrationsDir": "src/migration",
-    }
+    entities: [join(__dirname, '**', '*.model.{ts,js}')]
 }).then(() => {
     const app = express();
 
