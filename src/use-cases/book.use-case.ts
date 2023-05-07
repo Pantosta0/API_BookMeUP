@@ -18,7 +18,7 @@ export async function createBook(data: bookCreateInput): Promise<Book> {
 
 export async function getAllBooks(): Promise<Book[]> {
     const bookRepository = getRepository(Book);
-    const books = await bookRepository.find();
+    const books = await bookRepository.find({ relations: ["readingLists", "ranks"] });
     return books;
 }
 

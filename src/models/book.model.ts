@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, ManyToMany } from "typeorm";
 import { LectureList } from "./lecture-list.model";
+import { Rank } from "./rank.model";
 
 @Entity()
 export class Book {
@@ -18,8 +19,11 @@ export class Book {
     @Column({ nullable: true })
     avatarUrl!: string;
 
-    @ManyToOne(() => LectureList, readingList => readingList.books)
-    readingList?: LectureList;
+    @ManyToMany(() => LectureList, readingList => readingList.books)
+    readingLists!: LectureList[];
+
+    @OneToMany(() => Rank, rank => rank.book)
+    ranks!: Rank[]
 
     @CreateDateColumn()
     createdAt!: Date;

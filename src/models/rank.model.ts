@@ -1,18 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, JoinColumn, JoinTable } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne } from "typeorm";
 import { User } from "./user.model";
 import { Book } from "./book.model";
 
 @Entity()
-export class LectureList {
+export class Rank {
     @PrimaryGeneratedColumn()
     id!: number;
 
     @OneToOne(() => User, (user) => user.readingList)
     user: User;
 
-    @ManyToMany(() => Book, book => book.readingLists)
-    @JoinTable()
-    books: Book[];
+    @ManyToOne(() => Book, book => book.ranks)
+    book: Book;
 
     @CreateDateColumn()
     createdAt!: Date;
@@ -23,8 +22,8 @@ export class LectureList {
     @DeleteDateColumn()
     deletedAt!: Date;
 
-    constructor(user: User, books: Book[]) {
+    constructor(user: User, book: Book) {
         this.user = user;
-        this.books = books;
+        this.book = book;
     }
 }
