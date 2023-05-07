@@ -22,7 +22,7 @@ export class Book {
     @ManyToMany(() => LectureList, readingList => readingList.books)
     readingLists!: LectureList[];
 
-    @OneToMany(() => Rank, rank => rank.book)
+    @OneToMany(() => Rank, rank => rank.book, { cascade: true })
     ranks!: Rank[]
 
     @CreateDateColumn()

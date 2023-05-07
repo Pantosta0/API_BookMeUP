@@ -12,11 +12,13 @@ export type bookSearchInput = {
     title?: string;
     author?: string;
     description?: string;
+    dynamic?: string;
 }
 
 export async function createBook(data: bookCreateInput): Promise<Book> {
     data.title = data.title.toUpperCase();
     data.author = data.author.toUpperCase();
+    data.description = data.description.toUpperCase();
     const bookRepository = getRepository(Book);
     const bookEntity = <Book>data;
     const book = await bookRepository.save(bookEntity);
@@ -51,12 +53,21 @@ export async function searchBooks(query: bookSearchInput): Promise<Book[]> {
 
     builder = builder.leftJoinAndSelect('book.readingLists', 'readingLists').leftJoinAndSelect('book.ranks', 'ranks');
 
-    if (query.title !== undefined) {
-        builder = builder.where('book.title LIKE :title', { title: `%${query.title}%` })
-    }
 
-    if (query.author !== undefined) {
-        builder = builder.where('book.author LIKE :author', { author: `%${query.author}%` })
+
+    if (query.dynamic !== undefined) {
+        builder = builder.where('book.author LIKE :author', { author: `%${query.dynamic.toUpperCase()}%` })
+        builder = builder.orWhere('book.title LIKE :title', { title: `%${query.dynamic.toUpperCase()}%` })
+        builder = builder.orWhere('book.description LIKE :description', { description: `%${query.dynamic.toUpperCase()}%` })
+    } else {
+        if (query.title !== undefined) {
+            builder = builder.where('book.title LIKE :title', { title: `%${query.title.toUpperCase()}%` })
+        }
+
+        if (query.author !== undefined) {
+            builder = builder.where('book.author LIKE :author', { author: `%${query.author.toUpperCase()}%` })
+        }
+
     }
 
     const books = await builder.getMany();
