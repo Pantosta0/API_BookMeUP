@@ -27,3 +27,12 @@ export async function getBookById(id: number): Promise<Book | undefined> {
     const book = await bookRepository.findOne(id);
     return book;
 }
+
+export async function deleteBook(id: number): Promise<Book | undefined> {
+    const bookRepository = getRepository(Book);
+    const book = await bookRepository.findOne(id);
+    if (book !== undefined) {
+        await bookRepository.softRemove(book);
+    }
+    return book;
+}

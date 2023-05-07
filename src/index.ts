@@ -5,6 +5,7 @@ import { createConnection } from "typeorm";
 import dotenv from "dotenv";
 import { AuthController } from "./controllers/auth.controller";
 import { BookController } from "./controllers/book.controller";
+import { UserController } from "./controllers/user.controller";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ createConnection({
     app.use(express.json());
 
     app.use("/auth", AuthController);
+    app.use("/user", UserController);
     app.use("/book", BookController);
 
     app.listen(3000, () => {

@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { createBook, getAllBooks, getBookById } from "../use-cases/book.use-case";
+import { createBook, deleteBook, getAllBooks, getBookById } from "../use-cases/book.use-case";
 
 const router: Router = express.Router();
 
@@ -30,6 +30,17 @@ router.get("/:id", async (req, res) => {
     const book = await getBookById(parseInt(`${id}`));
     if (book == undefined) return res.status(404).json({ status: "error", message: "book not found" });
     return res.status(200).json({
+        status: "success",
+        data: book
+    });
+});
+
+router.delete("/:id", async (req, res) => {
+    const id = req.params.id;
+    const book = await getBookById(parseInt(`${id}`));
+    if (book == undefined) return res.status(404).json({ status: "error", message: "book not found" });
+    await deleteBook(book.id);
+    return res.status(204).json({
         status: "success",
         data: book
     });
