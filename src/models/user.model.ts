@@ -20,7 +20,7 @@ export class User {
     description!: string;
 
 
-    @OneToMany(() => Rank, rank => rank.book)
+    @OneToMany(() => Rank, rank => rank.user)
     ranks!: Rank[]
 
     @OneToOne(() => LectureList, (readingList) => readingList.user)

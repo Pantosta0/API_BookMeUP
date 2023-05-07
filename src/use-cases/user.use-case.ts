@@ -33,7 +33,7 @@ export async function getUserByUsername(username: string): Promise<User | undefi
 
 export async function getUserById(id: number): Promise<User | undefined> {
     const userRepository = getRepository(User);
-    const user = await userRepository.findOne(id, { relations: ['readingList', 'readingList.books'] });
+    const user = await userRepository.findOne(id, { relations: ['readingList', 'readingList.books', 'ranks', 'ranks.book'] });
     return user;
 }
 

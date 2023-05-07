@@ -24,7 +24,7 @@ export async function getAllBooks(): Promise<Book[]> {
 
 export async function getBookById(id: number): Promise<Book | undefined> {
     const bookRepository = getRepository(Book);
-    const book = await bookRepository.findOne(id);
+    const book = await bookRepository.findOne(id, { relations: ['ranks'] });
     return book;
 }
 

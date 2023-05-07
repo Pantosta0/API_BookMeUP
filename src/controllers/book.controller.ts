@@ -1,5 +1,7 @@
 import express, { Router } from "express";
 import { createBook, deleteBook, getAllBooks, getBookById } from "../use-cases/book.use-case";
+import { getUserById } from "../use-cases/user.use-case";
+import { createRank, getRankByUserAndBok, updateRank } from "../use-cases/rank.user-case";
 
 const router: Router = express.Router();
 
@@ -41,6 +43,30 @@ router.delete("/:id", async (req, res) => {
     if (book == undefined) return res.status(404).json({ status: "error", message: "book not found" });
     await deleteBook(book.id);
     return res.status(204).json({
+        status: "success",
+        data: book
+    });
+});
+
+router.post("/rank", async (req, res) => {
+    const { score, userId, bookId } = req.query;
+
+    let user = await getUserById(parseInt(`${userId}`));
+    if (user == undefined) return res.status(404).json({ status: "error", message: "user not found" });
+
+    let book = await getBookById(parseInt(`${bookId}`));
+    if (book == undefined) return res.status(404).json({ status: "error", message: "book not found" });
+
+    const foundRank = await getRankByUserAndBok(user.id, book.id);
+    if (foundRank !== undefined) {        
+        await updateRank(foundRank.id, { score: parseInt(`${score}`) });
+    } else {
+        user = await createRank(parseInt(`${score}`), user, book);
+    }
+
+    book = await getBookById(parseInt(`${bookId}`));
+
+    return res.status(201).json({
         status: "success",
         data: book
     });

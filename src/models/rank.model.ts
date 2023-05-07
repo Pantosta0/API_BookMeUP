@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "./user.model";
 import { Book } from "./book.model";
 
@@ -7,10 +7,15 @@ export class Rank {
     @PrimaryGeneratedColumn()
     id!: number;
 
+    @Column()
+    score: number;
+
     @ManyToOne(() => User, (user) => user.ranks)
+    @JoinColumn()
     user: User;
 
     @ManyToOne(() => Book, book => book.ranks)
+    @JoinColumn()
     book: Book;
 
     @CreateDateColumn()
@@ -22,7 +27,8 @@ export class Rank {
     @DeleteDateColumn()
     deletedAt!: Date;
 
-    constructor(user: User, book: Book) {
+    constructor(score: number, user: User, book: Book) {
+        this.score = score;
         this.user = user;
         this.book = book;
     }
