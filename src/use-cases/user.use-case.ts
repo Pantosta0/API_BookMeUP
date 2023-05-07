@@ -3,6 +3,7 @@ import { User } from "../models/user.model"
 import { hashPassword } from "../utils/global.util";
 import { LectureList } from "../models/lecture-list.model";
 import { Book } from "../models/book.model";
+import { generateAvatarLink } from "../utils/user.utils";
 
 export async function getAllUsers(where?: { username: string; }): Promise<User[]> {
     const userRepository = getRepository(User);
@@ -65,18 +66,34 @@ export async function addLectureToUser(userData: User, bookData: Book): Promise<
     return saved!;
 }
 
-export async function createUser(data: {
-    email: string, password: string, username: string, description: string
-}): Promise<User> {
+export async function createUser(data: { email: string, password: string, username: string, description: string, gender: string, avatarUrl?: string }): Promise<User> {
+
+    let avatar = "https://cdn-icons-png.flaticon.com/512/1/1247.png";
+
     data.password = await hashPassword(data.password);
     data.email = data.email.toLowerCase();
     data.username = data.username.toLowerCase();
+
+    data.gender = data.gender.toUpperCase();
+
+    if (data.gender == "M") {
+        data.avatarUrl = await generateAvatarLink("male");
+    } else if (data.gender == "F") {
+        data.avatarUrl = await generateAvatarLink("female");
+    } else {
+        data.avatarUrl = avatar;
+    }
+
     const userRepository = getRepository(User);
     const lectureListRepository = getRepository(LectureList);
+
+
     let userEntity = <User>data;
     let user = await userRepository.save(userEntity);
+
     let lectureListEntity = new LectureList(userEntity, []);
     await lectureListRepository.save(lectureListEntity);
+
     let saved = await userRepository.findOne(user.id, { relations: ["readingList"] });
     return saved!;
 }

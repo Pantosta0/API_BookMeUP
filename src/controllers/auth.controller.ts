@@ -11,7 +11,7 @@ router.post("/login", async (req, res) => {
     if (password == undefined || typeof password !== "string" || password.length < 1) return res.status(400).json({ status: "error", message: "invalid password" });
     let user = await getUserByEmail(email);
     if (user == undefined) return res.status(404).json({ status: "error", message: "user not found" });
-    if (await comparePasswords(password, user!.password) == false) return res.status(401).json({ status: "error", message: "no auth" });        
+    if (await comparePasswords(password, user!.password) == false) return res.status(401).json({ status: "error", message: "no auth" });
     user.readingList = user.readingList ? user.readingList : undefined;
     return res.status(200).json({
         status: "success",
@@ -20,7 +20,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-    const { email, password, username, description } = req.body;
+    const { email, password, username, description, gender } = req.body;
     // validate email
     if (email == undefined || typeof email !== "string" || email.length < 1) return res.status(400).json({ status: "error", message: "invalid email" });
     // validate password
@@ -29,10 +29,12 @@ router.post("/register", async (req, res) => {
     if (username == undefined || typeof username !== "string" || username.length < 1) return res.status(400).json({ status: "error", message: "invalid username" });
     // validate description
     if (description == undefined || typeof description !== "string" || description.length < 1) return res.status(400).json({ status: "error", message: "invalid description" });
+    // validate gender
+    if (gender == undefined || typeof gender !== "string" || (gender.toUpperCase() != "M" && gender.toUpperCase() != "F" && gender.toUpperCase() != "X")) return res.status(400).json({ status: "error", message: "invalid gender (M,F,X)" });
     // validate user existence with email and username
     if (await getUserByEmailOrUsername(email, username) !== undefined) return res.status(400).json({ status: "error", message: "user already exist" });
     // create new user
-    const userCreated = await createUser({ email, password, username, description });
+    const userCreated = await createUser({ email, password, username, description, gender });
     return res.status(201).json({
         status: "success",
         data: userCreated

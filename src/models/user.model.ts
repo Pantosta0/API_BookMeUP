@@ -19,6 +19,11 @@ export class User {
     @Column({ nullable: true })
     description!: string;
 
+    @Column({ nullable: true })
+    gender!: string;
+
+    @Column({ nullable: true })
+    avatarUrl!: string;
 
     @OneToMany(() => Rank, rank => rank.user, { cascade: true })
     ranks!: Rank[]
@@ -36,10 +41,12 @@ export class User {
     @DeleteDateColumn()
     deletedAt!: Date;
 
-    constructor(email: string, password: string, username: string, description: string) {
+    constructor(email: string, password: string, username: string, description: string, gender: string, avatarUrl: string) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.description = description;
+        this.gender = gender;
+        this.avatarUrl = avatarUrl;
     }
 }
