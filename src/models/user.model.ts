@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
 import { LectureList } from "./lecture-list.model";
+import { Rank } from "./rank.model";
 
 @Entity()
 export class User {
@@ -17,6 +18,10 @@ export class User {
 
     @Column({ nullable: true })
     description!: string;
+
+
+    @OneToMany(() => Rank, rank => rank.book)
+    ranks!: Rank[]
 
     @OneToOne(() => LectureList, (readingList) => readingList.user)
     @JoinColumn()

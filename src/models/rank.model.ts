@@ -7,7 +7,7 @@ export class Rank {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @OneToOne(() => User, (user) => user.readingList)
+    @ManyToOne(() => User, (user) => user.ranks)
     user: User;
 
     @ManyToOne(() => Book, book => book.ranks)
