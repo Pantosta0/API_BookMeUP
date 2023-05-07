@@ -77,6 +77,7 @@ export async function createUser(data: { email: string, password: string, userna
     data.gender = data.gender.toUpperCase();
 
     if (data.gender == "M") {
+        console.log("male")
         data.avatarUrl = await generateAvatarLink("male");
     } else if (data.gender == "F") {
         data.avatarUrl = await generateAvatarLink("female");
