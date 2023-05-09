@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
-import { createConnection } from "typeorm";
+import { ConnectionOptions, createConnection } from "typeorm";
 import dotenv from "dotenv";
 import { AuthController } from "./controllers/auth.controller";
 import { BookController } from "./controllers/book.controller";
@@ -10,7 +10,7 @@ import { join } from 'path';
 
 dotenv.config();
 
-createConnection({
+const TYPEORM_CONFIG: ConnectionOptions = {
     type: "mssql",
     host: process.env.DB_HOST!,
     port: parseInt(process.env.DB_PORT + ""),
@@ -20,7 +20,11 @@ createConnection({
     synchronize: true,
     logging: ["error"],
     entities: [join(__dirname, '**', '*.model.{ts,js}')]
-}).then(() => {
+};
+
+console.debug(TYPEORM_CONFIG);
+
+createConnection(TYPEORM_CONFIG).then(() => {
     const app = express();
 
     // Agregar middleware Helmet
@@ -38,7 +42,7 @@ createConnection({
     app.use("/user", UserController);
     app.use("/book", BookController);
 
-    app.listen(3000,"0.0.0.0", () => {
+    app.listen(3000, "0.0.0.0", () => {
         console.log("Server running on port 3000");
     });
 });
