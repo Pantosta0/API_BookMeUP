@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "firebase-functions": "^4.3.1",
     "helmet": "^6.1.5",
+    "mssql": "^6.4.1",
     "node-fetch": "^3.3.1",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",

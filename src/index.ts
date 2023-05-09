@@ -11,7 +11,7 @@ import { join } from 'path';
 dotenv.config();
 
 createConnection({
-    type: "postgres",
+    type: "mssql",
     host: process.env.DB_HOST!,
     port: parseInt(process.env.DB_PORT + ""),
     username: process.env.DB_USERNAME,
@@ -38,7 +38,7 @@ createConnection({
     app.use("/user", UserController);
     app.use("/book", BookController);
 
-    app.listen(3000, () => {
+    app.listen(3000,"0.0.0.0", () => {
         console.log("Server running on port 3000");
     });
 });
