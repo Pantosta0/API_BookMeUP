@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
 import { LectureList } from "./lecture-list.model";
 import { Rank } from "./rank.model";
+import { Session } from "./session.model";
 
 @Entity()
 export class User {
@@ -30,6 +31,9 @@ export class User {
 
     @OneToMany(() => Rank, rank => rank.user, { cascade: true })
     ranks!: Rank[]
+
+    @OneToMany(() => Session, session => session.user, { cascade: true })
+    session!: Session[]
 
     @OneToOne(() => LectureList, (readingList) => readingList.user)
     @JoinColumn()
