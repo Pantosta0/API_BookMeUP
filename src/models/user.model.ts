@@ -33,7 +33,7 @@ export class User {
     ranks!: Rank[]
 
     @OneToMany(() => Session, session => session.user, { cascade: true })
-    session!: Session[]
+    sessions!: Session[]
 
     @OneToOne(() => LectureList, (readingList) => readingList.user)
     @JoinColumn()

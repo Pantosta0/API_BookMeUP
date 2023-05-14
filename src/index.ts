@@ -7,6 +7,7 @@ import { AuthController } from "./controllers/auth.controller";
 import { BookController } from "./controllers/book.controller";
 import { UserController } from "./controllers/user.controller";
 import { join } from 'path';
+import { SessionController } from "./controllers/session.controller";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ createConnection(TYPEORM_CONFIG).then(() => {
     app.use("/auth", AuthController);
     app.use("/user", UserController);
     app.use("/book", BookController);
+    app.use("/session", SessionController);
 
     app.listen(3000, "0.0.0.0", () => {
         console.log("Server running on port 3000");
