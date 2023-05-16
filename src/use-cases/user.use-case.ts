@@ -34,7 +34,7 @@ export async function getUserByUsername(username: string): Promise<User | undefi
 
 export async function getUserById(id: number): Promise<User | undefined> {
     const userRepository = getRepository(User);
-    const user = await userRepository.findOne(id, { relations: ['readingList', 'readingList.books', 'ranks', 'ranks.book'] });
+    const user = await userRepository.findOne(id, { relations: ['readingList', 'readingList.books', 'ranks', 'ranks.book', 'friends'] });
     return user;
 }
 
@@ -120,6 +120,28 @@ export async function getUserByUsernameLike(username: string): Promise<User[]> {
         where: {
             username: Like(`%${username}%`)
         },
+        relations: ['readingList', 'readingList.books', 'ranks', 'ranks.book', 'friends']
     });
     return user;
+}
+
+export async function addFriend(id: number, friendId: number): Promise<User> {
+    const userRepository = getRepository(User);
+    let user = await getUserById(id);
+    let friend = await getUserById(friendId);
+
+    user!.friends = user!.friends.concat([friend!]) || [friend!];
+
+    return await userRepository.save(user!);
+}
+
+
+export async function removeFriend(id: number, friendId: number): Promise<User> {
+    const userRepository = getRepository(User);
+    let user = await getUserById(id);
+    let friend = await getUserById(friendId);
+
+    user!.friends = user!.friends.filter(el => el.id !== friend?.id);
+
+    return await userRepository.save(user!);
 }

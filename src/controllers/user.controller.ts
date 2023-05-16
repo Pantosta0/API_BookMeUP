@@ -1,8 +1,58 @@
 import express, { Router } from "express";
 import { createBook, deleteBook, getAllBooks, getBookById } from "../use-cases/book.use-case";
-import { addLectureToUser, getUserById, getUserByUsernameLike } from "../use-cases/user.use-case";
+import { addFriend, addLectureToUser, getUserById, getUserByUsernameLike, removeFriend } from "../use-cases/user.use-case";
 
 const router: Router = express.Router();
+
+
+
+router.post("/addFriend", async (req, res) => {
+    const { userId, friendId } = req.query;
+
+    if (userId == friendId) {
+        return res.status(400).json({ status: "error", message: "user cannot be same" });
+    }
+
+    let user = await getUserById(parseInt(`${userId}`));
+    const friend = await getUserById(parseInt(`${friendId}`));
+
+    if (user == undefined) return res.status(404).json({ status: "error", message: "user not found" });
+    if (friend == undefined) return res.status(404).json({ status: "error", message: "user friend not found" });
+
+
+    user = await addFriend(user.id, friend.id);
+
+    return res.status(200).json({
+        status: "success",
+        data: user
+    });
+
+});
+
+router.post("/removeFriend", async (req, res) => {
+    const { userId, friendId } = req.query;
+
+    if (userId == friendId) {
+        return res.status(400).json({ status: "error", message: "user cannot be same" });
+    }
+
+    let user = await getUserById(parseInt(`${userId}`));
+    const friend = await getUserById(parseInt(`${friendId}`));
+
+    if (user == undefined) return res.status(404).json({ status: "error", message: "user not found" });
+    if (friend == undefined) return res.status(404).json({ status: "error", message: "user friend not found" });
+
+
+    user = await removeFriend(user.id, friend.id);
+
+    return res.status(200).json({
+        status: "success",
+        data: user
+    });
+
+});
+
+
 
 router.get("/search/", async (req, res) => {
     const { username } = req.query;

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, ManyToOne } from "typeorm";
 import { LectureList } from "./lecture-list.model";
 import { Rank } from "./rank.model";
 import { Session } from "./session.model";
@@ -37,6 +37,13 @@ export class User {
 
     @OneToMany(() => Session, session => session.user, { cascade: true })
     sessions!: Session[]
+
+    @OneToMany(() => User, user => user.me, { cascade: true })
+    friends!: User[]
+
+    @ManyToOne(() => User, (user) => user.friends)
+    @JoinColumn()
+    me!: User;
 
     @OneToOne(() => LectureList, (readingList) => readingList.user)
     @JoinColumn()
