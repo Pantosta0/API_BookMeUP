@@ -16,6 +16,9 @@ export class Book {
     @Column({ nullable: true })
     author!: string;
 
+    @Column({ nullable: false, default: 350 })
+    pages!: number;
+
     @Column({ nullable: true })
     avatarUrl!: string;
 
@@ -34,10 +37,11 @@ export class Book {
     @DeleteDateColumn()
     deletedAt!: Date;
 
-    constructor(title: string, description: string, author: string, avatarUrl: string) {
+    constructor(title: string, description: string, author: string, avatarUrl: string, pages: number) {
         this.title = title;
         this.description = description;
         this.author = author;
         this.avatarUrl = avatarUrl;
+        this.pages = pages;
     }
 }

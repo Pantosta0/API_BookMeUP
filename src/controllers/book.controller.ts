@@ -8,8 +8,8 @@ const router: Router = express.Router();
 
 router.post("/", async (req, res) => {
     try {
-        const { avatarUrl, title, author, description } = req.body;
-        const bookCreated = await createBook({ author, avatarUrl, title, description });
+        const { avatarUrl, title, author, description, pages } = req.body;
+        const bookCreated = await createBook({ author, avatarUrl, title, description, pages });
         return res.status(201).json({
             status: "success",
             data: bookCreated
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
 });
 
 
-router.get("/search", async (req, res) => {    
+router.get("/search", async (req, res) => {
     let bookList = await searchBooks(req.query);
     return res.status(201).json({
         status: "success",

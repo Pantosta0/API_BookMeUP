@@ -6,6 +6,7 @@ export type bookCreateInput = {
     title: string;
     author: string;
     description: string;
+    pages: number;
 }
 
 export type bookSearchInput = {
