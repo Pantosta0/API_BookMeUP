@@ -29,6 +29,9 @@ export class User {
     @Column({ nullable: true })
     avatarUrl!: string;
 
+    @Column({ default: 0 })
+    rate!: number;
+
     @OneToMany(() => Rank, rank => rank.user, { cascade: true })
     ranks!: Rank[]
 

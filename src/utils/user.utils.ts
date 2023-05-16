@@ -7,7 +7,7 @@ export async function generateAvatarLink(gender: string): Promise<string> {
         const response = await axios.get(url);
         return response.data.results[0].picture.large
     } catch (error: any) {
-        console.log(error.message || "error");
+        console.debug(error.message || "error");
         return "https://cdn-icons-png.flaticon.com/512/1/1247.png"
     }
 }

@@ -76,8 +76,7 @@ export async function createUser(data: { email: string, password: string, userna
 
     data.gender = data.gender.toUpperCase();
 
-    if (data.gender == "M") {
-        console.log("male")
+    if (data.gender == "M") {       
         data.avatarUrl = await generateAvatarLink("male");
     } else if (data.gender == "F") {
         data.avatarUrl = await generateAvatarLink("female");
@@ -97,4 +96,20 @@ export async function createUser(data: { email: string, password: string, userna
 
     let saved = await userRepository.findOne(user.id, { relations: ["readingList"] });
     return saved!;
+}
+
+export async function addSessionRate(id: number, rateGenerated: number) {
+    const userRepository = getRepository(User);
+    let user = await getUserById(id);
+    const { rate } = user!;
+    if (rateGenerated == 1) {
+        user!.rate = user!.rate + 1;
+    } else if (rateGenerated > 1) {
+        let newRate = rate - rateGenerated
+        if (newRate <= 0) {
+            newRate = 0;
+        }
+        user!.rate = newRate;
+    }
+    await userRepository.save(user!);
 }

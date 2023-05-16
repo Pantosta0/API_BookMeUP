@@ -1,8 +1,8 @@
 import express, { Router } from "express";
-import { createUser, getUserByEmail, getUserByEmailOrUsername } from "../use-cases/user.use-case";
+import { addSessionRate, createUser, getUserByEmail, getUserByEmailOrUsername } from "../use-cases/user.use-case";
 import { comparePasswords, hashPassword } from "../utils/global.util";
 import { LectureList } from "../models/lecture-list.model";
-import { createSession } from "../use-cases/session.use-case";
+import { createSession, retrieveUserSessionRate } from "../use-cases/session.use-case";
 
 const router: Router = express.Router();
 
@@ -17,7 +17,6 @@ router.post("/login", async (req, res) => {
 
     // create user session
     await createSession(user);
-
 
     return res.status(200).json({
         status: "success",
