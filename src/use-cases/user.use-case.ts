@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { Like, getRepository } from "typeorm";
 import { User } from "../models/user.model"
 import { hashPassword } from "../utils/global.util";
 import { LectureList } from "../models/lecture-list.model";
@@ -76,7 +76,7 @@ export async function createUser(data: { email: string, password: string, userna
 
     data.gender = data.gender.toUpperCase();
 
-    if (data.gender == "M") {       
+    if (data.gender == "M") {
         data.avatarUrl = await generateAvatarLink("male");
     } else if (data.gender == "F") {
         data.avatarUrl = await generateAvatarLink("female");
@@ -112,4 +112,14 @@ export async function addSessionRate(id: number, rateGenerated: number) {
         user!.rate = newRate;
     }
     await userRepository.save(user!);
+}
+
+export async function getUserByUsernameLike(username: string): Promise<User[]> {
+    const userRepository = getRepository(User);
+    const user = await userRepository.find({
+        where: {
+            username: Like(`%${username}%`)
+        },
+    });
+    return user;
 }

@@ -1,8 +1,18 @@
 import express, { Router } from "express";
 import { createBook, deleteBook, getAllBooks, getBookById } from "../use-cases/book.use-case";
-import { addLectureToUser, getUserById } from "../use-cases/user.use-case";
+import { addLectureToUser, getUserById, getUserByUsernameLike } from "../use-cases/user.use-case";
 
 const router: Router = express.Router();
+
+router.get("/search/", async (req, res) => {
+    const { username } = req.query;
+    const user = await getUserByUsernameLike(username?.toString() !== undefined ? username?.toString() : "");
+    if (user == undefined) return res.status(404).json({ status: "error", message: "user not found" });
+    return res.status(200).json({
+        status: "success",
+        data: user
+    });
+});
 
 
 router.get("/:id", async (req, res) => {
@@ -25,10 +35,10 @@ router.post("/lecture", async (req, res) => {
         if (book == undefined) return res.status(404).json({ status: "error", message: "book not found" });
 
 
-        const bookSaved = user.readingList?.books?.find(el => book.id == el.id);        
+        const bookSaved = user.readingList?.books?.find(el => book.id == el.id);
 
         if (bookSaved !== undefined) return res.status(400).json({ status: "error", message: "book already saved into lecture list" });
-        
+
         user = await addLectureToUser(user, book);
 
         return res.status(200).json({
